@@ -6,7 +6,7 @@ BASE = "http://localhost:%s" % os.environ.get("PORT", "5001")
 T = 10
 
 
-def post(body=None, **kw):
+def post(**kw):
     return requests.post(BASE + "/items", timeout=T, **kw)
 
 
