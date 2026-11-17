@@ -1,7 +1,7 @@
 # app/routes.py
 
 from app import app
-from app.errors import ApiError
+from app.errors import ApiError, error_detail, validation_details
 from app.validation import ItemIn
 from flask import request
 from pydantic import ValidationError
@@ -32,12 +32,11 @@ def add_item():
         raise ApiError(400, 'malformed_json', 'Request body is not valid JSON')
     if not isinstance(payload, dict):
         raise ApiError(422, 'validation_error', 'Request body must be a JSON object',
-                       [{'loc': [], 'msg': 'must be a JSON object', 'type': 'object_type'}])
+                       [error_detail([], 'must be a JSON object', 'object_type')])
     try:
         item = ItemIn.model_validate(payload)
     except ValidationError as exc:
-        details = [{'loc': list(e['loc']), 'msg': e['msg'], 'type': e['type']}
-                   for e in exc.errors()]
-        raise ApiError(422, 'validation_error', 'Invalid item', details)
+        raise ApiError(422, 'validation_error', 'Invalid item',
+                       validation_details(exc.errors()))
     items.append(item.model_dump(exclude_none=True))
     return {'message': 'Item added successfully'}, 201

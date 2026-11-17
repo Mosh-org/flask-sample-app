@@ -23,11 +23,22 @@ def error_response(status, code, message, details=None):
     return jsonify(body), status
 
 
+def error_detail(loc, msg, type_):
+    return {"loc": list(loc), "msg": msg, "type": type_}
+
+
+def validation_details(errors):
+    """Convert pydantic ``exc.errors()`` into the uniform details list."""
+    return [error_detail(e["loc"], e["msg"], e["type"]) for e in errors]
+
+
 @app.errorhandler(ApiError)
 def handle_api_error(exc):
     return error_response(exc.status, exc.code, exc.message, exc.details)
 
 
+# 415 is still needed here for UnsupportedMediaType raised by werkzeug itself
+# (not through ApiError).
 _HTTP_CODES = {
     404: "not_found",
     405: "method_not_allowed",
