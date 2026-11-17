@@ -23,6 +23,7 @@ def assert_error(response, status, code):
 def test_hello(client):
     r = client.get('/')
     assert (r.status_code, r.text) == (200, "Hello, Flask!")
+    assert r.headers['Content-Type'] == 'text/html; charset=utf-8'
 
 
 def test_unknown_route_uniform_404(client):
