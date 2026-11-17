@@ -7,7 +7,9 @@ from flask import Flask
 
 app = Flask(__name__)
 
-log_dir = os.path.join(os.path.expanduser("~"), ".flask_sample_app")
+log_dir = os.environ.get("FLASK_SAMPLE_APP_LOG_DIR") or os.path.join(
+    os.path.expanduser("~"), ".flask_sample_app"
+)
 os.makedirs(log_dir, exist_ok=True)
 log_file = os.path.join(log_dir, "flask_sample_app.log")
 
@@ -25,4 +27,4 @@ app.logger.info(
     platform.node(), platform.system(), log_file,
 )
 
-from app import routes
+from app import errors, routes  # noqa: E402,F401
