@@ -1,3 +1,17 @@
+"""Flask application package for the sample app.
+
+Importing this package has side effects: it creates the Flask application
+object, ensures the log directory ``~/.flask_sample_app`` exists, attaches a
+rotating file handler to the application logger at INFO level, and writes a
+startup message to the log.
+
+Attributes:
+    app: The Flask application instance.
+    log_dir: Directory holding the application log files.
+    log_file: Full path of the application log file.
+    file_handler: Rotating file handler attached to ``app.logger``.
+"""
+
 import logging
 import os
 import platform
@@ -5,13 +19,13 @@ from logging.handlers import RotatingFileHandler
 
 from flask import Flask
 
-app = Flask(__name__)
+app: Flask = Flask(__name__)
 
-log_dir = os.path.join(os.path.expanduser("~"), ".flask_sample_app")
+log_dir: str = os.path.join(os.path.expanduser("~"), ".flask_sample_app")
 os.makedirs(log_dir, exist_ok=True)
-log_file = os.path.join(log_dir, "flask_sample_app.log")
+log_file: str = os.path.join(log_dir, "flask_sample_app.log")
 
-file_handler = RotatingFileHandler(log_file, maxBytes=1_048_576, backupCount=5)
+file_handler: RotatingFileHandler = RotatingFileHandler(log_file, maxBytes=1_048_576, backupCount=5)
 file_handler.setFormatter(logging.Formatter(
     "%(asctime)s %(levelname)s [%(name)s] %(message)s"
 ))
@@ -25,4 +39,6 @@ app.logger.info(
     platform.node(), platform.system(), log_file,
 )
 
+# Imported last on purpose: the routes module does ``from app import app``, so
+# ``app`` must already be defined above to avoid a circular import failure.
 from app import routes
