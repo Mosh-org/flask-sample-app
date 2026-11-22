@@ -1,0 +1,15 @@
+# Dev-tool configuration only; runtime dependencies live in requirements.txt.
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["app", "run.py"]
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = true
+
+[tool.ruff.lint]
+select = ["D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"

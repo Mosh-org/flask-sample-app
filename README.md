@@ -8,7 +8,9 @@ The project is organized as follows:
 
 - `app/`: Contains the Flask application and routes.
 - `tests/`: Houses unit tests for the application.
-- `run.py`: A script to run the Flask application.
+- `run.py`: A script to run the Flask application (port from `PORT`, default 5001).
+- `compile_all.py`: Syntax-checks all Python files.
+- `requirements-dev.txt` / `pyproject.toml`: Dev tooling (mypy, ruff) and its configuration.
 
 ## Getting Started
 
@@ -18,7 +20,7 @@ To get the Flask app up and running on your local machine, follow these steps:
 
    ```bash
    git clone <repository_url>
-   cd flask_sample_app
+   cd flask-sample-app
    ```
 
 2. **Set Up a Virtual Environment:**
@@ -46,7 +48,7 @@ To get the Flask app up and running on your local machine, follow these steps:
    python run.py
    ```
 
-   The app will be available at [http://localhost:5000](http://localhost:5000).
+   The app will be available at [http://localhost:5001](http://localhost:5001).
 
 5. **Run Tests:**
 
@@ -57,6 +59,16 @@ To get the Flask app up and running on your local machine, follow these steps:
    ```
 
    This command will discover and run all tests in the `tests` directory.
+
+   Note: `tests/test_integration.py` requires a running server (port 5001, or `TEST_PORT`), and `tests/test_integration_fail.py` fails intentionally. For the self-contained suite use `pytest tests/test_app.py`.
+
+6. **Type Check (optional):**
+
+   ```bash
+   pip install -r requirements-dev.txt
+   mypy app run.py
+   ruff check --select D app run.py
+   ```
 
 ## Application Routes
 
