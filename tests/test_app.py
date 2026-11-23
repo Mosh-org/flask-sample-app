@@ -2,11 +2,13 @@
 
 import unittest
 from app import app
+from app.routes import items
 
 class TestAppRoutes(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
         self.app.testing = True
+        items.clear()
 
     def test_hello_route(self):
         response = self.app.get('/')
@@ -18,12 +20,25 @@ class TestAppRoutes(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.get_json(), {'message': 'Item added successfully'})
 
+    def test_get_items_route(self):
+        items.append({"name": "item1"})
+        response = self.app.get('/items')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get_json(), {'items': [{'name': 'item1'}]})
+
+    def test_get_items_route_empty(self):
+        response = self.app.get('/items')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get_json(), {'items': []})
+
     def test_get_item_route(self):
+        items.append({"name": "item1"})
         response = self.app.get('/items/0')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get_json(), {'item': {'name': 'item1'}})
 
     def test_get_nonexistent_item_route(self):
+        items.append({"name": "item1"})
         response = self.app.get('/items/1')
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.get_json(), {'error': 'Item not found'})
