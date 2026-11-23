@@ -1,3 +1,5 @@
+"""Flask sample application package: creates the app, configures logging and registers routes."""
+
 import logging
 import os
 import platform
