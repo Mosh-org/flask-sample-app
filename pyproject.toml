@@ -1,0 +1,7 @@
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["app", "run.py"]
+
+[tool.ruff]
+line-length = 100
