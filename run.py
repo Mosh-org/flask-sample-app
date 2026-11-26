@@ -1,8 +1,4 @@
-"""Entry point for running the Flask sample app's development server.
-
-Starts the application on the port given by the ``PORT`` environment
-variable, defaulting to 5001.
-"""
+"""Launch the Flask sample app's development server on the port given by the PORT env var."""
 
 import os
 
