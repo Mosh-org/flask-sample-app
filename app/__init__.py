@@ -27,4 +27,4 @@ app.logger.info(
     platform.node(), platform.system(), log_file,
 )
 
-from app import routes  # noqa: E402,F401  (registers the route handlers on `app`)
+from app import routes  # noqa: F401  (registers the route handlers on `app`)
